@@ -1,23 +1,5 @@
-# What is Redis?
+# This is System-Software-Experiment 3 repository
 
-Redis is often referred as a ***data structures*** server
+*student Name* : **Park sejin**<br/>
 
-# Building Redis
-
-+ It is simple, just type `make`
-
-```
-% make
-```
-
-+ For 32bit machine
-	+ You can run a ~~64bit~~ 32bit **Redis** binary using:
-
-```
-% make 32bit
-```
-
-# Link
-
-[Redis](https://redis.io)
-* * *
+In **SungKyunKuan University**
