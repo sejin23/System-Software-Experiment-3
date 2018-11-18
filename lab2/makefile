@@ -1,13 +1,14 @@
 #Makefile
 
-lib: library.o space.o main.o
-        g++ -o lib library.o space.o main.o
+lib: Library.o Space.o Member.o main.o
+	g++ -o lib Library.o Space.o Member.o main.o
 main.o: main.cpp
-        g++ -c main.cpp
-library.o: Library.cpp
-        g++ -c Library.cpp
-space.o: Member.cpp
-        g++ -c Space.cpp
+	g++ -c main.cpp
+Library.o: Library.cpp
+	g++ -c Library.cpp
+Space.o: Space.cpp
+	g++ -c Space.cpp
+Member.o: Member.cpp
+	g++ -c Member.cpp
 clean:
-        rm *.o lib
-
+	rm *.o lib

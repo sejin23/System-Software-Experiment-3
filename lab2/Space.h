@@ -6,7 +6,6 @@ class Space{
         char state;
         int rsv_time;
         int date[4];
-        virtual int validate(int* d, char op);
 };
 
 class Study_Room: public Space{
@@ -14,11 +13,12 @@ class Study_Room: public Space{
         int personnel;
     public:
         Study_Room();
-        ~Study_Room();
         string getusrname();
         int validate(int* d, char op);
         void setResrv(string name, int time, int resv_n, int* d);
-
+        void setstate(char op);
+        int getrsvtime();
+        int* getstartdate();
 };
 
 class Seat: public Space{
@@ -26,7 +26,11 @@ class Seat: public Space{
         int floor;
     public:
         Seat();
-        ~Seat();
         string getusrname();
         int validate(int* d, char op);
+        void borrResrv(string mem_name, int* d, int t, int fl);
+        void emtResrv();
+        void cmbResrv();
+        int getrsvtime();
+        int* getstartdate();
 };
