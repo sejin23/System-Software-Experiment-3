@@ -1,4 +1,5 @@
 #include <string>
+#include <fstream>
 #include <iostream>
 #include "Library.h"
 using namespace std;
@@ -8,6 +9,21 @@ Library::Library(int fl, int room_n, int seat_n){
     floor_m = fl;
     room_m = room_n;
     seat_m = seat_n;
+    string rsrcType, rsrcName;
+    book = new Book*[100];
+    rstd_mem = NULL;
+	ifstream fin("resource.dat");
+	fin >> rsrcType >> rsrcName;
+    i = 0;
+	while(1){
+		fin >> rsrcType >> rsrcName;
+		if(fin.eof()) break;
+        if(!rsrcType.compare("Book")){
+            book[i] = new Book(rsrcName);
+            i++;
+        }
+	}
+    rsc_m = i;
     str = new Study_Room*[room_n];
     for(i=0;i<room_n;i++) str[i] = NULL;
     set = new Seat**[fl];
@@ -29,7 +45,8 @@ Library::~Library(){
         for(j=0;j<50;j++) delete set[i][j];
     }
     for(i=0;i<3;i++) delete[] set[i];
-
+    for(i=0;i<rsc_m;i++) delete book[i];
+    delete[] book;
     delete[] set;
 }
 
@@ -174,4 +191,126 @@ int Library::fullspace(string sp_type, char op, int sp_n, int* d){
         }
     }
     return 0;
+}
+
+int Library::searchRsc(string src_name){
+    int i;
+    for(i=0;i<rsc_m;i++){
+        if(!src_name.compare(book[i]->getsrcname())) return 1;
+    }
+    return 0;
+}
+
+int Library::execresrc(string mem_name, string mem_type, char op, int* d){
+    int i, sum = 1;
+    if(op != 'B') return 0;
+    for(i=0;i<rsc_m;i++){
+        if(book[i]->getrscstate() == 'B' && !mem_name.compare(book[i]->getusername())) sum++;
+    }
+    if(!mem_type.compare("Undergraduate") && sum > 1) return 1;
+    return 0;
+}
+
+int Library::isBorrowed(string mem_name, string mem_type, string rsc_type, string rsc_name, char op){
+    int i;
+    if(op == 'R'){
+        for(i=0;i<rsc_m;i++){
+            if(!rsc_name.compare(book[i]->getsrcname())){
+                if(mem_name.compare(book[i]->getusername())) return 1;
+                break;
+            }
+        }
+        return 0;
+    }else if(op == 'B'){
+        for(i=0;i<rsc_m;i++){
+            if(!rsc_name.compare(book[i]->getsrcname())){
+                if(book[i]->getrscstate() == 'B') {
+                    if(!mem_name.compare(book[i]->getusername())) return 1;
+                    else return 2;
+                }
+                break;
+            }
+        }
+        return 0;
+    }
+}
+
+int* Library::borroweddate(string mem_name, string mem_type, string rsc_name, string rsc_type){
+    int i, j;
+    for(i=0;i<rsc_m;i++){
+        if(!rsc_name.compare(book[i]->getsrcname()))
+            return book[i]->getdelay();
+    }
+}
+
+int Library::isDelayedMem(string mem_name, string mem_type, char op, int* d){
+    rsted* temp = rstd_mem;
+    if(rstd_mem == NULL || op != 'B') return 0;
+    while(temp != NULL){
+        if(!mem_type.compare("Undergraduate")){
+            if(!mem_name.compare(temp->und->getUserName())){
+                if(temp->und->comparedate(d)) return 1;
+                break;
+            }
+        }
+        temp = temp->next;
+    }
+    return 0;
+}
+
+int* Library::delayeddate(string mem_name, string mem_type){
+    rsted* temp = rstd_mem;
+    while(temp != NULL){
+        if(!mem_type.compare("Undergraduate")){
+            if(!mem_name.compare(temp->und->getUserName()))
+                return temp->und->getdelayed();
+        }
+        temp = temp->next;
+    }
+}
+
+int Library::setBorrow(string mem_name, string mem_type, string rsc_name, string rsc_type, char op, int* d){
+    int i, res;
+    int* delay;
+    rsted* temp = rstd_mem;
+    rsted* resr;
+    for(i=0;i<rsc_m;i++){
+        if(!rsc_name.compare(book[i]->getsrcname())) break;
+    }
+    if(i == rsc_m) return -1;
+    if(op == 'B'){
+        book[i]->borrowresrc(mem_name, mem_type, d);
+        return 1;
+    }else if(op == 'R'){
+        res = book[i]->returnresrc(mem_name, mem_type, d);
+        if(res == 2){
+            delay = book[i]->getdelay();
+            if(temp == NULL){
+                resr = new rsted();
+                resr->und = new Undergraduate();
+                resr->und->setmember(mem_name);
+                resr->und->setdelayed(d, delay);
+                resr->next = NULL;
+                rstd_mem = resr;
+            }else{
+                while(temp->next != NULL){
+                    if(!mem_name.compare(temp->und->getUserName())){
+                        temp->und->setdelayed(d, delay);
+                        break;
+                    }
+                    temp = temp->next;
+                }
+                if(temp->next == NULL && mem_name.compare(temp->und->getUserName())){
+                    resr = new rsted();
+                    resr->und = new Undergraduate();
+                    resr->und->setmember(mem_name);
+                    resr->und->setdelayed(d, delay);
+                    resr->next = NULL;
+                    temp->next = resr;
+                }
+            }
+            delete[] delay;
+            return 2;
+        }else if(res == 1) return 1;
+    }
 }
