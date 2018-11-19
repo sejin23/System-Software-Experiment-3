@@ -55,6 +55,10 @@ void Study_Room::setstate(char op){
     state = op;
 }
 
+char Study_Room::getstate(){
+    return state;
+}
+
 int Study_Room::getrsvtime(){
     return rsv_time;
 }
@@ -107,10 +111,17 @@ void Seat::cmbResrv(){
     state = 'B';
 }
 
+char Seat::getstate(){
+    return state;
+}
+
 int Seat::getrsvtime(){
     return rsv_time;
 }
 
 int* Seat::getstartdate(){
-    return date;
+    int* d = new int[4];
+    int i;
+    for(i=0;i<4;i++) d[i] = date[i];
+    return d;
 }

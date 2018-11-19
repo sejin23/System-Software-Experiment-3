@@ -18,6 +18,7 @@ class Study_Room: public Space{
         int validate(int* d, char op);
         void setResrv(string name, int time, int resv_n, int* d);
         void setstate(char op);
+        char getstate();
         int getrsvtime();
         int* getstartdate();
 };
@@ -32,6 +33,7 @@ class Seat: public Space{
         void borrResrv(string mem_name, int* d, int t, int fl);
         void emtResrv();
         void cmbResrv();
+        char getstate();
         int getrsvtime();
         int* getstartdate();
 };
