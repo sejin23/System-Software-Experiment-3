@@ -38,7 +38,6 @@ string Book::getsrcname(){
 
 string Book::getusername(){
 	if(und != NULL) return und->getUserName();
-	else return "NULL";
 }
 
 void Book::borrowresrc(string mem_name, string mem_type, int* d){
