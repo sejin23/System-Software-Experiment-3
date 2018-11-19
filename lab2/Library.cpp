@@ -77,7 +77,7 @@ void Library::exeReserve(int* d, string sp_type, int sp_n, char op, string mem_n
             }else if(op == 'R'){
                 if(set[sp_n-1][i]!=NULL && !mem_name.compare(set[sp_n-1][i]->getusrname()) && set[sp_n-1][i]->validate(d, op)){
                     delete set[sp_n-1][i];
-                    set[sp_n][i] = NULL;
+                    set[sp_n-1][i] = NULL;
                     seat_status[sp_n-1]--;
                     break;
                 }
@@ -109,7 +109,7 @@ int Library::validID(string sp_type, int sp_n){
 int Library::executable(int* d, int rsv_time, string sp_type, int fl){
     if(!sp_type.compare("StudyRoom") && (d[3] < 9 || d[3] > 18)) return 0;
     else if(!sp_type.compare("Seat")){
-        if((fl == 2 && (d[3] < 9 || d[3] > 21)) || (fl == 3 && (d[3] < 9 || d[3] > 18))) return 0;
+        if((fl == 2 && (d[3] < 9 || d[3] >= 21)) || (fl == 3 && (d[3] < 9 || d[3] >= 18))) return 0;
     }
     return 1;
 }
@@ -126,9 +126,10 @@ int Library::borrowed(string mem_name, string sp_type, char op, int* d){
     }else if(!sp_type.compare("Seat")){
         for(i=0;i<floor_m;i++){
             for(j=0;j<room_m;j++){
-                if(set[i][j] == NULL) continue;
-                else if(!mem_name.compare(set[i][j]->getusrname())){
-                    if(set[i][j]->validate(d, op)) return 1;
+                if(set[i][j] != NULL){
+                    if(!mem_name.compare(set[i][j]->getusrname())){
+                        if(set[i][j]->validate(d, op)) return 1;
+                    }
                 }
             }
         }
