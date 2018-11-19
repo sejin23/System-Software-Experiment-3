@@ -1,25 +1,21 @@
 #include <string>
 using namespace std;
-typedef struct _rsv{
-	int date[3];
-	int stt, rsv;
-	struct _rsv* next;
-}rsvt;
 
 class Member{
 	protected:
 		string memname;
-		rsvt* rsvhead;
 		Member();
 };
 
 class Undergraduate: public Member{
 	private:
-		int maxRST;
 		int numOfBorrow;
+		int delayed[3];
 	public:
 		Undergraduate();
 		string getUserName();
-		void setRsv(int* d, int time);
-		int RSTdiff(int* d, int time);
+		int comparedate(int* d);
+		int* getdelayed();
+		void setmember(string mem_name);
+		void setdelayed(int* d, int* delay);
 };
