@@ -5,10 +5,8 @@ using namespace std;
 int diffdate(int* d, int* e, int t, char st){
     int i;
     for(i=0;i<3;i++){
-        //cout << d[i] << ": " << e[i] << endl;
         if(d[i] != e[i]) return 0;
     }
-    //cout << d[i] << ": " << e[i] << endl;
     if(e[3] + t >= 24) return 0;
     if(st == 'E'){
         if(d[3] > e[3] + 1) return 0;
