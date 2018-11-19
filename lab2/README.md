@@ -97,7 +97,7 @@ class Seat: public Space{
 
 *Resource와 Member에 대한 내용은 lab1에 존재한다.*
 
-###Inheritance Structure###
+### Inheritance Structure ###
 - Library에 각 Resource, Space, Member들을 가리키는 포인터가 저장되어 있다.
 - Resource는 Book에게 상속되어 book class를 이용되고, Member도 Undergraduate에게 상속되어 undergraduate class를 이용된다.
 - Space는 StudyRoom과 Seat에게 상속되어 각 space type에 맞게 class를 사용된다.
