@@ -1,127 +1,107 @@
-#include <string>
-#include <iostream>
 #include "Space.h"
 using namespace std;
-int diffdate(int* d, int* e, int t, char st){
+
+Space::Space(){
     int i;
-    for(i=0;i<3;i++){
-        if(d[i] != e[i]) return 0;
+    state = 'N';
+    for(i=0;i<4;i++){
+        emptytime[i] = 0;
+        returntime[i] = 0;
     }
-    if(e[3] + t >= 24) return 0;
-    if(st == 'E'){
-        if(d[3] > e[3] + 1) return 0;
-    }
-    if(d[3] > e[3] + t) return 0;
-    return 1;
 }
 
-Study_Room::Study_Room(){
-    personnel = 0;
+string Space::getusername(){
+    return username;
 }
 
-string Study_Room::getusrname(){
-    return user_name;
-}
-
-int Study_Room::validate(int* d, char op){
-    int res = diffdate(d, date, rsv_time, state);
-    switch(op){
-        case 'B':
-            if(!res) return 0;
-            break;
-        case 'R':
-            if(!res) return 0;
-            break;
-        case 'E':
-            if(state == 'E' || !res) return 0;
-            break;
-        case 'C':
-            if(state == 'B' || !res) return 0;
-            break;
-    }
-    return 1;
-}
-
-void Study_Room::setResrv(string name, int time, int resv_n, int* d){
-    int i;
-    personnel = resv_n;
-    user_name = name;
-    state = 'B';
-    rsv_time = time;
-    for(i=0;i<4;i++) date[i] = d[i];
-}
-
-void Study_Room::setstate(char op){
-    state = op;
-}
-
-char Study_Room::getstate(){
+char Space::getstate(){
     return state;
 }
 
-int Study_Room::getrsvtime(){
-    return rsv_time;
-}
-
-int* Study_Room::getstartdate(){
-    return date;
-}
-
-Seat::Seat(){
-    floor = 0;
-}
-
-string Seat::getusrname(){
-    return user_name;
-}
-
-int Seat::validate(int* d, char op){
-    int res = diffdate(d, date, rsv_time, state);
-    switch(op){
-        case 'B':
-            if(!res) return 0;
-            break;
-        case 'R':
-            if(!res) return 0;
-            break;
-        case 'E':
-            if(state == 'E' || !res) return 0;
-            break;
-        case 'C':
-            if(state == 'B' || !res) return 0;
-            break;
-    }
-    return 1;
-}
-
-void Seat::borrResrv(string mem_name, int* d, int t, int fl){
+void Space::setuserborrow(string mem_name, int* nowd, int rsvtime){
     int i;
-    floor = fl;
-    user_name = mem_name;
+    username = mem_name;
     state = 'B';
-    rsv_time = t;
-    for(i=0;i<4;i++) date[i] = d[i];
+    for(i=0;i<4;i++) returntime[i] = nowd[i];
+    returntime[3] += 3;
+    if(returntime[3] >= 24){
+        returntime[3] -= 24;
+        returntime[2]++;
+    }
+    if(returntime[2] > 30){
+        returntime[2] -= 30;
+        returntime[1]++;
+    }
+    if(returntime[1] > 12){
+        returntime[1] -= 12;
+        returntime[0]++;
+    }
 }
 
-void Seat::emtResrv(){
+void Space::setuserreturn(){
+    int i;
+    for(i=0;i<4;i++)
+        returntime[i] = 0;
+    state = 'N';
+}
+
+void Space::setempty(int* d){
+    int i;
     state = 'E';
+    for(i=0;i<4;i++) emptytime[i] = d[i];
+    emptytime[3] += 1;
+    if(emptytime[3] >= 24){
+        emptytime[3] -= 24;
+        emptytime[2]++;
+    }
+    if(emptytime[2] > 30){
+        emptytime[2] -= 30;
+        emptytime[1]++;
+    }
+    if(emptytime[1] > 12){
+        emptytime[1] -= 12;
+        emptytime[0]++;
+    }
 }
 
-void Seat::cmbResrv(){
-    state = 'B';
-}
-
-char Seat::getstate(){
-    return state;
-}
-
-int Seat::getrsvtime(){
-    return rsv_time;
-}
-
-int* Seat::getstartdate(){
-    int* d = new int[4];
+void Space::setstate(){
     int i;
-    for(i=0;i<4;i++) d[i] = date[i];
-    return d;
+    state = 'B';
+    for(i=0;i<4;i++) emptytime[i] = 0;
+}
+
+int Space::isavailable(int* nowd){
+    int i;
+    if(state == 'B'){
+        for(i=0;i<3;i++){
+            if(nowd[i] != returntime[i]){
+                state = 'N';
+                return 1;
+            }
+        }
+        if(nowd[3] < returntime[3]) return 0;
+        state = 'N';
+        return 1;
+    }else if(state == 'E'){
+        for(i=0;i<3;i++){
+            if(nowd[i] != emptytime[i]){
+                state = 'N';
+                return 1;
+            }
+        }
+        if(nowd[3] < emptytime[3]) return 0;
+        state = 'N';
+        return 1;
+    }else
+        return 1;
+}
+
+int Space::getremaintime(int* d){
+    return returntime[3] - d[3];
+}
+
+Study_Room::Study_Room():Space(){
+}
+
+Seat::Seat():Space(){
 }

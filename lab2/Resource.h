@@ -1,26 +1,52 @@
 #include <string>
-#include "Member.h"
+#include <vector>
 using namespace std;
 
 class Resource{
 	protected:
-		string srcname;
-		char state;
-		int duedate[3];
-		Undergraduate* und;
-		Resource(string src_name);
-		~Resource();
+		string srcname;	//자원 이름
+		string usrname;	//대여 유저정보
+		char state;		//현재 대여 상태
+		int brwdate[3];	//빌린 날짜 년,월,일
+		int retdate[3];	//반납일 년,월,일
+		Resource(string src);
+	public:
+		string getsrcname();
+		string getusrname();
+		int isborrowed();
+		int* getborroweddate();
+		int* getreturndate();
+		void setBorrow(string mem_name, string mem_type, int* nowdate);
+		int returnresrc(int* d);
 };
 
 class Book: public Resource{
 	public:
 		Book(string src_name);
-		char getrscstate();
-		string getsrcname();
-		string getusername();
-		void borrowresrc(string mem_name, string mem_type, int* d);
-		int returnresrc(string mem_name, string mem_type, int* d);
-		int* getdelay();
+};
+typedef struct _monthly{
+	string month; 
+	string user;
+	int brwdate[3];
+	int retdate[3];
+}M_User;
+class Magazine: public Resource{
+	private:
+		vector<M_User> muser;
+	public:
+		Magazine(string src_name);
+		int isborrowedmgz(string month);
+		string getmgzusrname(string month);
+		int* getmgzborroweddate(string month);
+		int* getmgzreturndate(string month);
+		void setMgzBorrow(string mem_name, string mem_type, string month, int* nowdate);
+		int returnMgzsrc(int* d, string month);
 };
 
-int CompareDate(int* srcDate, int* dueDate);
+class E_book: public Resource{
+	private:
+		int capacity;
+	public:
+		E_book(string src_name, int cap);
+		int getcapacity();
+};

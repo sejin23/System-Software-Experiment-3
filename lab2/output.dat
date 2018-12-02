@@ -1,8 +1,8 @@
 Op_#	Return_code	Description
 1	0	Success.
 2	8	Invalid space id.
-3	9	This space is not available now. Available from 09 to 18.
-4	10	You did not borrow this space.
+3	9	This space is not available now. Available from 09 from 18.
+4	10	You did not borrow this place.
 5	0	Success.
 6	11	You already borrowed this kind of space.
 7	12	Exceed available number.
@@ -17,14 +17,18 @@ Op_#	Return_code	Description
 16	0	Success.
 17	0	Success.
 18	0	Success.
-19	14	There is no remain space. This space is available after 12.
-20	0	Success.
+19	14	There is no remain space. This space is available after 2.
+20	0	Success
 21	1	Non exist resource.
-22	2	Exceeds your possible number of borrow. Possible # of borrows: 1
+22	0	Success
 23	2	Exceeds your possible number of borrow. Possible # of borrows: 1
-24	5	Other member already borrowed this book. This book will be returned at 19/04/03
-25	7	Delayed return. You'll be restricted until 19/04/05
-26	6	Restricted member until 19/04/05
-27	0	Success.
-28	0	Success.
+24	5	Other member already borrowed this book. This book will be returned at 19/03/30
+25	7	Delayed return. You'll be restricted until 19/04/08
+26	16	Previously borrowed books are overdue, so borrow is limited.
+27	2	Exceeds your possible number of borrow. Possible # of borrows: 1
+28	0	Success
 29	3	You did not borrow this book.
+30	0	Success.
+31	0	Success.
+32	0	Success.
+33	0	Success.

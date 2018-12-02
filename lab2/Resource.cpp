@@ -1,75 +1,169 @@
-#include <iostream>
-#include <fstream>
-#include <string>
 #include "Resource.h"
+#include <iostream>
 using namespace std;
 
-int CompareDate(int* srcDate, int* dueDate){
+Resource::Resource(string src){
 	int i;
 	for(i=0;i<3;i++){
-		if(srcDate[i] > dueDate[i]) return 0;
+		brwdate[i] = 0;
+		retdate[i] = 0;
 	}
-	return 1;
+	srcname = src;
+	state = 'N';
+}
+string Resource::getsrcname(){
+	return srcname;
+}
+string Resource::getusrname(){
+	return usrname;
 }
 
-Resource::Resource(string src_name){
+int Resource::isborrowed(){
+	if(state == 'N') return 0;
+	else if(state == 'B') return 1;
+}
+
+int* Resource::getborroweddate(){
+	int* date = new int[3];
 	int i;
-	srcname = src_name;
-	state = 'X';
-	und = NULL;
-	for(i=0;i<3;i++) duedate[i] = 0;
+	for(i=0;i<3;i++) date[i] = brwdate[i];
+	return date;
 }
 
-Resource::~Resource(){
-	delete und;
+int* Resource::getreturndate(){
+	int* date = new int[3];
+	int i;
+	for(i=0;i<3;i++) date[i] = retdate[i];
+	return date;
+}
+
+void Resource::setBorrow(string mem_name, string mem_type, int* nowdate){
+	int i;
+	usrname = mem_name;
+	state = 'B';
+	for(i=0;i<3;i++){
+		brwdate[i] = nowdate[i];
+		retdate[i] = nowdate[i];
+	}
+	if(!mem_type.compare("Undergraduate")) retdate[2] += 13;
+	else if(!mem_type.compare("Graduate") || !mem_type.compare("Faculty")) retdate[2] += 29;
+	if(retdate[2] > 30){
+		retdate[2] -= 30;
+		retdate[1]++;
+	}
+	if(retdate[1] > 12){
+		retdate[1] -= 12;
+		retdate[0]++;
+	}
+}
+
+int Resource::returnresrc(int* d){
+	int i, temp = 0;
+	state = 'N';
+	for(i=0;i<3;i++){
+		if(d[i] > retdate[i]){
+			temp = 1;
+			break;
+		}else if(d[i] < retdate[i]){
+			temp = 2;
+			break;
+		}
+	}
+	if(temp == 0 || temp == 2) return 1;
+	else if(temp == 1) return 2;
 }
 
 Book::Book(string src_name):Resource(src_name){
-
 }
 
-char Book::getrscstate(){
-	return state;
+Magazine::Magazine(string src_name):Resource(src_name){
 }
 
-string Book::getsrcname(){
-	return srcname;
-}
-
-string Book::getusername(){
-	if(und != NULL) return und->getUserName();
-}
-
-void Book::borrowresrc(string mem_name, string mem_type, int* d){
-	state = 'B';
-	if(und != NULL) delete und;
-	und = new Undergraduate();
-	und->setmember(mem_name);
-	duedate[2] = d[2] + 13;
-	duedate[1] = d[1];
-	duedate[0] = d[0];
-	if(duedate[2] > 30){
-		duedate[2] -= 30;
-		duedate[1]++;
+int Magazine::isborrowedmgz(string month){
+	vector<M_User>::iterator iter;
+	for(iter=muser.begin();iter!=muser.end();++iter){
+		if(!month.compare(iter->month)) return 1;
 	}
-	if(duedate[1] > 12){
-		duedate[1] -= 12;
-		duedate[0]++;
+	return 0;
+}
+
+string Magazine::getmgzusrname(string month){
+	vector<M_User>::iterator iter;
+	for(iter=muser.begin();iter!=muser.end();++iter){
+		if(!month.compare(iter->month)) return iter->user;
 	}
 }
 
-int Book::returnresrc(string mem_name, string mem_type, int* d){
-	state = 'X';
-	delete und;
-	und = NULL;
-	if(CompareDate(d, duedate))
-		return 1;
-	else return 2;
-}
-
-int* Book::getdelay(){
-	int* d = new int[3];
+int* Magazine::getmgzborroweddate(string month){
 	int i;
-	for(i=0;i<3;i++) d[i] = duedate[i];
-	return d;
+	int* newdate = new int[3];
+	vector<M_User>::iterator iter;
+	for(iter=muser.begin();iter!=muser.end();++iter){
+		if(!month.compare(iter->month)){
+			for(i=0;i<3;i++) newdate[i] = iter->brwdate[i];
+			return newdate;
+		}
+	}
+}
+
+int* Magazine::getmgzreturndate(string month){
+	int i;
+	int* newdate = new int[3];
+	vector<M_User>::iterator iter;
+	for(iter=muser.begin();iter!=muser.end();++iter){
+		if(!month.compare(iter->month)){
+			for(i=0;i<3;i++) newdate[i] = iter->retdate[i];
+			return newdate;
+		}
+	}
+}
+
+void Magazine::setMgzBorrow(string mem_name, string mem_type, string month, int* nowdate){
+	int i;
+	M_User temp;
+	temp.user = mem_name;
+	temp.month = month;
+	for(i=0;i<3;i++){
+		temp.brwdate[i] = nowdate[i];
+		temp.retdate[i] = nowdate[i];
+	}
+	if(!mem_type.compare("Undergraduate")) temp.retdate[2] += 13;
+	else if(!mem_type.compare("Graduate") || !mem_type.compare("Faculty")) temp.retdate[2] += 29;
+	if(temp.retdate[2] > 30){
+		temp.retdate[2] -= 30;
+		temp.retdate[1]++;
+	}
+	if(temp.retdate[1] > 12){
+		temp.retdate[1] -= 12;
+		temp.retdate[0]++;
+	}
+	muser.push_back(temp);
+}
+
+int Magazine::returnMgzsrc(int* d, string month){
+	int i, temp = 0;
+	vector<M_User>::iterator iter;
+	for(iter=muser.begin();iter!=muser.end();++iter){
+		if(!month.compare(iter->month)){
+			for(i=0;i<3;i++){
+				if(d[i] > iter->retdate[i]){
+					temp = 1;
+					break;
+				}else if(d[i] < iter->retdate[i]){
+					temp = 2;
+					break;
+				}
+			}
+			if(temp == 1) return 2;
+			else return 1;
+		}
+	}
+}
+
+E_book::E_book(string src_name, int cap):Resource(src_name){
+	capacity = cap;
+}
+
+int E_book::getcapacity(){
+	return capacity;
 }
