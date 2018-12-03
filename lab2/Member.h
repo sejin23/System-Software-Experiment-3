@@ -8,10 +8,10 @@ typedef struct ebkin{
 }Ebkin;
 class Member {
 	protected:
-		string username;	//유저 정보
-		vector<Ebkin> ebk;	//빌린 전자 책의 정보
-		int srcnum, srcmax, e_storage, max_storage;	//빌린 책의 권 수, 전자책 용량
-		int delay[3];	//연체 시간 년월일
+		string username;
+		vector<Ebkin> ebk;
+		int srcnum, srcmax, e_storage, max_storage;
+		int delay[3];
 		Member(string mem_name, int usablersc);
 		~Member();
 	public:
