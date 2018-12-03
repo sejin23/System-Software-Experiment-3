@@ -4,11 +4,11 @@ using namespace std;
 
 class Resource{
 	protected:
-		string srcname;	//자원 이름
-		string usrname;	//대여 유저정보
-		char state;		//현재 대여 상태
-		int brwdate[3];	//빌린 날짜 년,월,일
-		int retdate[3];	//반납일 년,월,일
+		string srcname;
+		string usrname;
+		char state;
+		int brwdate[3];
+		int retdate[3];
 		Resource(string src);
 	public:
 		string getsrcname();
