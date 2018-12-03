@@ -3,6 +3,13 @@
 #include <sstream>
 #include "Library.h"
 using namespace std;
+int namewithnumbers(string name){
+    int i;
+    for(i=0;i<name.length();i++){
+        if(name.at(i) >= '0' && name.at(i) <= '9') return 1;
+    }
+    return 0;
+}
 
 Library::Library(int fl, int room_n, int seat_n){
     int i, j;
@@ -64,6 +71,9 @@ void Library::BorrowResource(int opn, int* nowdate, string rsc_type, string rsc_
     string name, month;
     ofstream fout;
     fout.open("output.dat", ios_base::out | ios_base::app);
+    if(nowdate[0] < 10) throw 1;
+    if(mem_type.compare("Undergraduate") && mem_type.compare("Graduate") && mem_type.compare("Faculty")) throw 4;
+    if(namewithnumbers(mem_name)) throw 5;
     if(op == 'B'){
         if(!rsc_type.compare("Book")){
             vector<Book>::iterator iter;
@@ -731,7 +741,7 @@ void Library::BorrowResource(int opn, int* nowdate, string rsc_type, string rsc_
                 }
             }
         }
-    }
+    }else throw 3;
     fout.close();
 }
 
@@ -739,6 +749,10 @@ void Library::BorrowSpace(int opn, int* nowdate, string sp_type, int sp_num, str
     int i, j, temp, min = 24;
     ofstream fout;
     fout.open("output.dat", ios_base::out | ios_base::app);
+    if(nowdate[0] < 2010) throw 1;
+    if(mem_type.compare("Undergraduate") && mem_type.compare("Graduate") && mem_type.compare("Faculty")) throw 4;
+    if(namewithnumbers(mem_name)) throw 5;
+    if(rsv_time < 0) throw 6;
     if(!sp_type.compare("StudyRoom")){
         if(sp_num < 1 || sp_num > room_m){
             fout << endl << opn << "\t8\tInvalid space id.";
@@ -764,7 +778,7 @@ void Library::BorrowSpace(int opn, int* nowdate, string sp_type, int sp_num, str
                 return;
             }
         }
-    }
+    }else throw 2;
     if(op == 'B'){
         if(!sp_type.compare("StudyRoom")){
             for(i=0;i<room_m;i++){
@@ -903,6 +917,6 @@ void Library::BorrowSpace(int opn, int* nowdate, string sp_type, int sp_num, str
             fout << endl << opn << "\t10\tYou did not borrow this place.";
             return;
         }
-    }
+    }else throw 3;
     fout.close();
 }

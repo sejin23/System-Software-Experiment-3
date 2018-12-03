@@ -6,8 +6,8 @@ using namespace std;
 
 class Library{
     private:
-        int floor_m, room_m, room_state, seat_m; //층 수, 방 수, 현재 방 상태, 좌석 수
-        int* seat_status;   //좌석 현재 인원
+        int floor_m, room_m, room_state, seat_m;
+        int* seat_status;
         Study_Room** str;
         Seat*** set;
         vector<Book> book;
