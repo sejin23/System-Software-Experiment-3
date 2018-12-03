@@ -60,8 +60,20 @@ int main(int argc, char** argv){
             if(inbreak) k = 2;
             else if(spbreak) k = 1;
         }
-        if(k == 1) lib->BorrowResource(i, indate, rsc_type, rsc_name, inmem_type, inmem_name, inop);
-        else if(k == 2) lib->BorrowSpace(i, date, sp_type, sp_num, mem_type, mem_name, op, num_of_mem, rsv_time);
+        try{
+            if(k == 1) lib->BorrowResource(i, indate, rsc_type, rsc_name, inmem_type, inmem_name, inop);
+            else if(k == 2) lib->BorrowSpace(i, date, sp_type, sp_num, mem_type, mem_name, op, num_of_mem, rsv_time);
+        }catch(int err){
+            ofstream fout;
+            fout.open("output.dat", ios_base::out | ios_base::app);
+            fout << endl << i << "\t-1\t";
+            if(err == 1) fout << "Date out of range.";
+            else if(err == 2) fout << "Non-exist space type.";
+            else if(err == 3) fout << "Non-exist operation.";
+            else if(err == 4) fout << "Non-exist member type.";
+            else if(err == 5) fout << "Member name with numbers.";
+            else if(err == 6) fout << "Nagative.";
+        }
         i++;
     }
     fin.close();
