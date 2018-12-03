@@ -73,6 +73,7 @@ int main(int argc, char** argv){
             else if(err == 4) fout << "Non-exist member type.";
             else if(err == 5) fout << "Member name with numbers.";
             else if(err == 6) fout << "Nagative.";
+            fout.close();
         }
         i++;
     }
