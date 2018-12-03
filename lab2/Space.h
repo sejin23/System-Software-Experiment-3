@@ -3,10 +3,10 @@ using namespace std;
 
 class Space{
     protected:
-        string username;    //빌린 사람 정보
-        int emptytime[4];   //자리비운 시간
-        int returntime[4];  //반납 시간 년,월,일,시
-        char state; //현재 상태
+        string username;
+        int emptytime[4];
+        int returntime[4];
+        char state;
         Space();
     public:
         string getusername();
