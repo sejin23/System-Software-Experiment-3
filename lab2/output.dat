@@ -18,16 +18,16 @@ Op_#	Return_code	Description
 17	0	Success.
 18	0	Success.
 19	14	There is no remain space. This space is available after 2.
-20	0	Success
+20	0	Success.
 21	1	Non exist resource.
-22	0	Success
+22	0	Success.
 23	2	Exceeds your possible number of borrow. Possible # of borrows: 1
 24	5	Other member already borrowed this book. This book will be returned at 19/03/30
 25	7	Delayed return. You'll be restricted until 19/04/08
 26	16	Previously borrowed books are overdue, so borrow is limited.
 27	2	Exceeds your possible number of borrow. Possible # of borrows: 1
-28	0	Success
-29	3	You did not borrow this book.
+28	-1	Non-exist operation.
+29	1	Non exist resource.
 30	0	Success.
 31	0	Success.
 32	0	Success.
