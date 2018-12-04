@@ -16,7 +16,7 @@ functions
 + `./lib` command can make output in output.dat
 
 > **Main function :**
->   + main.cpp 파일에서는 두 번에 걸쳐 파일 입력 `input.dat`과 `space.dat` 파일에서 입력을 받고 두 번의 `while` 문을 통해 *op_code* 순서에 따라 결과 값을 `output.dat`에 저장합니다.
+>   + main.cpp 파일 Library의 constructor만 호출하고 종료합니다.
 
 > **Library function :**
 >   + `Library.h`
@@ -40,7 +40,7 @@ class Library{
         void BorrowSpace(int opn, int* nowdate, string sp_type, int sp_num, string mem_type, string mem_name, char op, int num_mem, int rsv_time);
 };
 ```
-+ main 함수에서 input.dat과 space.dat의 날짜 중 먼저 들어온 요청을 처리한다.
++ Library constructor에서 input.dat과 space.dat의 날짜 중 먼저 들어온 요청을 처리한다.
 + StudyRoom, Seat은 고정된 자리로 배정하고, 나머지 Resource들과 Member들은 resource.dat과 들어오는 요청들에 따라 동적으로 생성한다.
 
 > **Space function :**
