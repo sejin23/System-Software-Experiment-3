@@ -46,7 +46,7 @@ int mgzcmp(string src, int* date){
     return 1;
 }
 
-Library::Library(int fl, int room_n, int seat_n){
+Library::Library(int fl, int room_n, int seat_n, int sh){
     int i, j, k;
     string rsrcType, rsrcName, Name, cap;
     string sp_type, mem_type, mem_name;
@@ -58,8 +58,15 @@ Library::Library(int fl, int room_n, int seat_n){
     floor_m = fl;
     room_m = room_n;
     seat_m = seat_n;
-    ifstream fre("resource.dat");
-    ofstream fout("output.dat");
+    ifstream fre;
+    ofstream fout;
+    if(sh == 0){
+        fre.open("resource.dat");
+        fout.open("output.dat");
+    }else{
+        fre.open("./stream/resource.dat");
+        fout.open("./stream/output.dat");
+    }
     fout << "Op_#\tReturn_code\tDescription";
     fre >> rsrcType >> rsrcName;
     while(1){
@@ -96,15 +103,24 @@ Library::Library(int fl, int room_n, int seat_n){
     k = 0;
     inbreak = 0;
     spbreak = 0;
-    ifstream fin("input.dat");
-    ifstream fsp("space.dat");
+    ifstream fin;
+    ifstream fsp;
+    if(sh == 0){
+        fin.open("input.dat");
+        fsp.open("space.dat");
+    }else{
+        fin.open("./stream/input.dat");
+        fsp.open("./stream/space.dat");
+    }
     getline(fin, sp_type);
     getline(fsp, sp_type);
     while(1){
         if(k == 0){
             fin >> indate[0] >> sl >> indate[1] >> sl >> indate[2];
+            if(fin.eof()) inbreak = 1;
             fin >> rsc_type >> rsc_name >> inop >> inmem_type >> inmem_name;
             fsp >> date[0] >> sl >> date[1] >> sl >> date[2] >> sl >> date[3];
+            if(fsp.eof()) spbreak = 1;
             fsp >> sp_type >> sp_num >> op >> mem_type >> mem_name;
             if(op == 'B') fsp >> num_of_mem >> rsv_time;
         }else if(k == 1){
@@ -126,11 +142,12 @@ Library::Library(int fl, int room_n, int seat_n){
             else if(spbreak) k = 1;
         }
         try{
-            if(k == 1) BorrowResource(i, indate, rsc_type, rsc_name, inmem_type, inmem_name, inop);
-            else if(k == 2) BorrowSpace(i, date, sp_type, sp_num, mem_type, mem_name, op, num_of_mem, rsv_time);
+            if(k == 1) BorrowResource(i, indate, rsc_type, rsc_name, inmem_type, inmem_name, inop, sh);
+            else if(k == 2) BorrowSpace(i, date, sp_type, sp_num, mem_type, mem_name, op, num_of_mem, rsv_time, sh);
         }catch(int err){
             ofstream fout;
-            fout.open("output.dat", ios_base::out | ios_base::app);
+            if(sh == 0) fout.open("output.dat", ios_base::out | ios_base::app);
+            else fout.open("./stream/output.dat", ios_base::out | ios_base::app);
             fout << endl << i << "\t-1\t";
             if(err == 1) fout << "Date out of range.";
             else if(err == 2) fout << "Non-exist space type.";
@@ -160,13 +177,14 @@ Library::~Library(){
     delete[] set;
 }
 
-void Library::BorrowResource(int opn, int* nowdate, string rsc_type, string rsc_name, string mem_type, string mem_name, char op){
+void Library::BorrowResource(int opn, int* nowdate, string rsc_type, string rsc_name, string mem_type, string mem_name, char op, int sh){
     int i, temp, isdelay = 0;
     int* date;
     int* delaydate;
     string name, month;
     ofstream fout;
-    fout.open("output.dat", ios_base::out | ios_base::app);
+    if(sh == 0) fout.open("output.dat", ios_base::out | ios_base::app);
+    else fout.open("./stream/output.dat", ios_base::out | ios_base::app);
     if(nowdate[0] < 10) throw 1;
     if(mem_type.compare("Undergraduate") && mem_type.compare("Graduate") && mem_type.compare("Faculty")) throw 4;
     if(namewithnumbers(mem_name)) throw 5;
@@ -845,10 +863,11 @@ void Library::BorrowResource(int opn, int* nowdate, string rsc_type, string rsc_
     fout.close();
 }
 
-void Library::BorrowSpace(int opn, int* nowdate, string sp_type, int sp_num, string mem_type, string mem_name, char op, int num_mem, int rsv_time){
+void Library::BorrowSpace(int opn, int* nowdate, string sp_type, int sp_num, string mem_type, string mem_name, char op, int num_mem, int rsv_time, int sh){
     int i, j, temp, min = 24;
     ofstream fout;
-    fout.open("output.dat", ios_base::out | ios_base::app);
+    if(sh == 0) fout.open("output.dat", ios_base::out | ios_base::app);
+    else fout.open("./stream/output.dat", ios_base::out | ios_base::app);
     if(nowdate[0] < 2010) throw 1;
     if(mem_type.compare("Undergraduate") && mem_type.compare("Graduate") && mem_type.compare("Faculty")) throw 4;
     if(namewithnumbers(mem_name)) throw 5;

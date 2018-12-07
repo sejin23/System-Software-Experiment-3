@@ -8,9 +8,9 @@ Date[yy/mm/dd]	Resource_type	Resource_name	Operation	Member_type	Member_name
 19/04/05	Book	Cosmos	B	Graduate	Bruce
 19/04/06	Book	Cosmos	B	Undergraduate	BruceLee
 19/04/07	Book	Cosmos	Y	Undergraduate	Kiin
-19/04/08	Magazine	Hello[19/09]	B	Faculty	Lee
+19/04/08	Magazine	Hello[18/04]	B	Faculty	Lee
 19/04/09	E-book	Sapiens	B	Graduate	Kiin
 19/04/30	E-book	Cosmos	B	Graduate	Kiin
 19/05/04	E-book	Cosmos	R	Graduate	Kiin
 19/05/08	E-book	Sapiens	R	Graduate	Kiin
-
+20/07/12    Magazine    Hello[18/04]    R   Faculty Lee

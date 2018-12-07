@@ -17,8 +17,8 @@ class Library{
         vector<Graduate> grd;
         vector<Faculty> fac;
     public:
-        Library(int fl, int room_n, int seat_n);
+        Library(int fl, int room_n, int seat_n, int sh);
         ~Library();
-        void BorrowResource(int opn, int* nowdate, string rsc_type, string rsc_name, string mem_type, string mem_name, char op);
-        void BorrowSpace(int opn, int* nowdate, string sp_type, int sp_num, string mem_type, string mem_name, char op, int num_mem, int rsv_time);
+        void BorrowResource(int opn, int* nowdate, string rsc_type, string rsc_name, string mem_type, string mem_name, char op, int sh);
+        void BorrowSpace(int opn, int* nowdate, string sp_type, int sp_num, string mem_type, string mem_name, char op, int num_mem, int rsv_time, int sh);
 };
