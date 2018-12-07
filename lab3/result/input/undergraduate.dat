@@ -1,0 +1,7 @@
+Op_#	Return_code	Description
+1	1	Non exist resource.
+2	0	Success.
+3	2	Exceeds your possible number of borrow. Possible # of borrows: 1
+4	0	Success.
+5	2	Exceeds your possible number of borrow. Possible # of borrows: 1
+6	-1	Non-exist operation.

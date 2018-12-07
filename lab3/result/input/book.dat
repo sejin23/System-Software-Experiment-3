@@ -1,0 +1,10 @@
+Op_#	Return_code	Description
+1	0	Success.
+2	1	Non exist resource.
+3	0	Success.
+4	2	Exceeds your possible number of borrow. Possible # of borrows: 1
+5	5	Other member already borrowed this book. This book will be returned at 19/03/30
+6	7	Delayed return. You'll be restricted until 19/04/08
+7	16	Previously borrowed books are overdue, so borrow is limited.
+8	2	Exceeds your possible number of borrow. Possible # of borrows: 1
+9	-1	Non-exist operation.

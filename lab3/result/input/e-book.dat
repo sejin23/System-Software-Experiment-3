@@ -1,3 +1,5 @@
 Op_#	Return_code	Description
 1	0	Success.
-2	1	Non exist resource.
+2	0	Success.
+3	0	Success.
+4	0	Success.

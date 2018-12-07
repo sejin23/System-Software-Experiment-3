@@ -1,0 +1,15 @@
+Op_#	Return_code	Description
+1	0	Success.
+2	10	You did not borrow this place.
+3	12	Exceed available number.
+4	0	Success.
+5	0	Success.
+6	0	Success.
+7	0	Success.
+8	0	Success.
+9	0	Success.
+10	0	Success.
+11	0	Success.
+12	0	Success.
+13	0	Success.
+14	14	There is no remain space. This space is available after 2.

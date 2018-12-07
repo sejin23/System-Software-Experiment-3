@@ -1,0 +1,6 @@
+Op_#	Return_code	Description
+1	8	Invalid space id.
+2	9	This space is not available now. Available from 09 from 18.
+3	0	Success.
+4	11	You already borrowed this kind of space.
+5	13	Exceed available time.
